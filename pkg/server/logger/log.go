@@ -15,7 +15,7 @@ const (
 )
 
 type Log struct {
-	Msg   string
+	Msg   any
 	Level LoggingLevel
 }
 

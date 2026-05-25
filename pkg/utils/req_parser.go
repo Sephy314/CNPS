@@ -8,18 +8,18 @@ import (
 )
 
 func ParseRequest(rawreq string) (*dto.Request, error) {
-	var res dto.Request
+	var req dto.Request
 
-	if err := json.Unmarshal([]byte(rawreq), &res); err != nil {
+	if err := json.Unmarshal([]byte(rawreq), &req); err != nil {
 		return nil, err
 	}
 
-	if res.Type == "" ||
-		res.Cmd == "" ||
-		res.Act == "" ||
-		res.Target == "" {
+	if req.Type == "" ||
+		req.Cmd == "" ||
+		req.Act == "" ||
+		req.Target == "" {
 		return nil, cnpserr.BadRequestError("Request Type is required")
 	}
 
-	return &res, nil
+	return &req, nil
 }

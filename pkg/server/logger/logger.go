@@ -1,8 +1,10 @@
 package logger
 
 import (
+	"bytes"
 	"encoding/json"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -14,12 +16,18 @@ func (l Log) Print() {
 		"msg":   l.Msg,
 	}
 
-	marshalled, err := json.Marshal(logged)
+	var buf bytes.Buffer
+
+	encoder := json.NewEncoder(&buf)
+	encoder.SetEscapeHTML(false)
+
+	err := encoder.Encode(logged)
 	if err != nil {
 		log.Printf("Error marshalling logged: %s", err)
+		return
 	}
 
-	log.Printf("%+v", string(marshalled))
+	log.Print(strings.TrimSpace(buf.String()))
 }
 
 func (r ResponseLog) Print() {

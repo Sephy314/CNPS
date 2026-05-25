@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/Sephy314/cnps/pkg/client/client"
 	"github.com/Sephy314/cnps/pkg/dto"
 	"github.com/Sephy314/cnps/pkg/server/logger"
@@ -31,7 +29,7 @@ func main() {
 	}
 
 	logger.Log{
-		Msg:   fmt.Sprintf("%+v", res),
+		Msg:   res,
 		Level: logger.INFO,
 	}.Print()
 

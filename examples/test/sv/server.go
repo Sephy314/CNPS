@@ -24,7 +24,7 @@ func main() {
 
 func handler(req dto.Request) (dto.Response, error) {
 	logger.Log{
-		Msg:   fmt.Sprintf("Request: %s", req),
+		Msg:   fmt.Sprintf("Request: %+v", req),
 		Level: logger.INFO,
 	}.Print()
 
