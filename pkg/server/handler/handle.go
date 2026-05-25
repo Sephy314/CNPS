@@ -3,6 +3,7 @@ package handler
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -27,9 +28,15 @@ func HandleConnection(conn net.Conn) {
 		msg, err := reader.ReadString('\n')
 		if err != nil {
 			if err == io.EOF {
-				log.Printf("Connection closed by remote host")
+				//logger.Log{
+				//	Msg:   "Connection closed by remote hose",
+				//	Level: logger.INFO,
+				//}.Print()
 			} else {
-				log.Printf("Error reading from connection: %v", err)
+				logger.Log{
+					Msg:   fmt.Sprintf("Error reading from connection: %v", err),
+					Level: logger.ERROR,
+				}.Print()
 			}
 			return
 		}
@@ -54,9 +61,8 @@ func HandleConnection(conn net.Conn) {
 
 				cnpsLog := logger.ResponseLog{
 					Log: logger.Log{
-						Msg:    cnpErr.Message,
-						Level:  logger.ERROR,
-						Fields: nil,
+						Msg:   cnpErr.Message,
+						Level: logger.ERROR,
 					},
 					ReqID:  reqId,
 					Status: cnpErr.Code,
@@ -75,9 +81,8 @@ func HandleConnection(conn net.Conn) {
 
 			cnpsLog := logger.ResponseLog{
 				Log: logger.Log{
-					Msg:    err.Error(),
-					Level:  logger.ERROR,
-					Fields: nil,
+					Msg:   err.Error(),
+					Level: logger.ERROR,
 				},
 				ReqID:  reqId,
 				Status: status.StatusInternalError,
@@ -93,9 +98,8 @@ func HandleConnection(conn net.Conn) {
 		if res != nil {
 			cnpsLog := logger.ResponseLog{
 				Log: logger.Log{
-					Msg:    "Requested",
-					Level:  logger.INFO,
-					Fields: nil,
+					Msg:   "Requested",
+					Level: logger.INFO,
 				},
 				ReqID:  reqId,
 				Status: res.Status,

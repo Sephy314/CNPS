@@ -15,9 +15,8 @@ const (
 )
 
 type Log struct {
-	Msg    string
-	Level  LoggingLevel
-	Fields map[string]interface{} `json:",omitempty"`
+	Msg   string
+	Level LoggingLevel
 }
 
 type ResponseLog struct {
@@ -26,11 +25,7 @@ type ResponseLog struct {
 	Status status.Status
 }
 
-type Logging struct {
+type logging struct {
 	Msg   string
 	Level LoggingLevel
-}
-
-type Logger interface {
-	Print()
 }

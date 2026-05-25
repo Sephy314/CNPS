@@ -1,10 +1,11 @@
 package svr
 
 import (
-	"log"
+	"fmt"
 	"net"
 
 	"github.com/Sephy314/cnps/pkg/server/handler"
+	"github.com/Sephy314/cnps/pkg/server/logger"
 )
 
 func Start(addr string) error {
@@ -19,8 +20,6 @@ func Start(addr string) error {
 }
 
 func startCNPSServer(addr string) error {
-	log.SetFlags(0)
-
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
@@ -33,12 +32,19 @@ func startCNPSServer(addr string) error {
 		}
 	}(ln)
 
-	log.Printf("CNPS pkg is listening on %v", addr)
+	logger.Log{
+		Msg:   fmt.Sprintf("Starting server on %s", addr),
+		Level: logger.INFO,
+	}.Print()
 
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
-			log.Printf("Error accepting connection: %v", err)
+			logger.Log{
+				Msg:   fmt.Sprintf("Error accepting connection: %v", err),
+				Level: logger.ERROR,
+			}.Print()
+
 			continue
 		}
 

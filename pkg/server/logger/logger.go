@@ -7,6 +7,7 @@ import (
 )
 
 func (l Log) Print() {
+	log.SetFlags(0)
 	logged := map[string]any{
 		"level": l.Level,
 		"time":  time.Now(),
@@ -18,10 +19,11 @@ func (l Log) Print() {
 		log.Printf("Error marshalling logged: %s", err)
 	}
 
-	log.Println(string(marshalled))
+	log.Printf("%+v", string(marshalled))
 }
 
 func (r ResponseLog) Print() {
+	log.SetFlags(0)
 	logged := map[string]any{
 		"level":      r.Level,
 		"time":       time.Now(),
@@ -35,5 +37,5 @@ func (r ResponseLog) Print() {
 		log.Printf("Error marshalling logged: %s", err)
 	}
 
-	log.Println(string(marshalled))
+	log.Printf("%+v", string(marshalled))
 }

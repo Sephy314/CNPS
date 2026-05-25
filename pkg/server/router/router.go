@@ -3,11 +3,11 @@ package router
 import (
 	dto2 "github.com/Sephy314/cnps/pkg/dto"
 	"github.com/Sephy314/cnps/pkg/server/error"
-	"github.com/Sephy314/cnps/pkg/server/request"
+	"github.com/Sephy314/cnps/pkg/utils"
 )
 
 func Route(req string) (func(dto2.Request) (dto2.Response, error), error) {
-	parsedReq, err := request.ParseRequest(req)
+	parsedReq, err := utils.ParseRequest(req)
 
 	if err != nil {
 		return nil, cnpserr.BadRequestError("Error to parse request")
