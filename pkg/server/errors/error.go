@@ -1,4 +1,4 @@
-package cnpserr
+package errors
 
 import (
 	"github.com/Sephy314/cnps/pkg/server/status"

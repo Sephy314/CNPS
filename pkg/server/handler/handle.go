@@ -9,8 +9,8 @@ import (
 	"net"
 
 	"github.com/Sephy314/cnps/pkg/logger"
-	"github.com/Sephy314/cnps/pkg/server/error"
-	response2 "github.com/Sephy314/cnps/pkg/server/response"
+	cnpserr "github.com/Sephy314/cnps/pkg/server/errors"
+	"github.com/Sephy314/cnps/pkg/server/response"
 	"github.com/Sephy314/cnps/pkg/server/status"
 	"github.com/google/uuid"
 )
@@ -52,12 +52,12 @@ func HandleConnection(conn net.Conn) {
 
 		if err != nil {
 
-			// CNPS error check
+			// CNPS errors check
 			var cnpErr *cnpserr.CNPSError
 			if errors.As(err, &cnpErr) {
 				log.Printf("CNPS Error Occurred: %v", cnpErr)
 
-				newCnpsErr := response2.CreateCnpsErrorResponse(*cnpErr)
+				newCnpsErr := response.CreateCnpsErrorResponse(*cnpErr)
 
 				cnpsLog := logger.ResponseLog{
 					Log: logger.Log{
@@ -70,14 +70,14 @@ func HandleConnection(conn net.Conn) {
 
 				cnpsLog.Print()
 
-				response2.WriteResponse(&conn, newCnpsErr)
+				response.WriteResponse(&conn, newCnpsErr)
 
 				continue
 			}
 
-			// generic error
+			// generic errors
 			log.Printf("Internal Error: %v", err)
-			internalErr := response2.CreateErrorResponse(err)
+			internalErr := response.CreateErrorResponse(err)
 
 			cnpsLog := logger.ResponseLog{
 				Log: logger.Log{
@@ -90,7 +90,7 @@ func HandleConnection(conn net.Conn) {
 
 			cnpsLog.Print()
 
-			response2.WriteResponse(&conn, internalErr)
+			response.WriteResponse(&conn, internalErr)
 
 			return
 		}
@@ -107,7 +107,7 @@ func HandleConnection(conn net.Conn) {
 
 			cnpsLog.Print()
 
-			response2.WriteResponse(&conn, *res)
+			response.WriteResponse(&conn, *res)
 		}
 
 	}
