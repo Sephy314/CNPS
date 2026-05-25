@@ -52,9 +52,8 @@ func HandleConnection(conn net.Conn) {
 
 		if err != nil {
 
-			// CNPS errors check
-			var cnpErr *cnpserr.CNPSError
-			if errors.As(err, &cnpErr) {
+			// CNPS errs check
+			if cnpErr, ok := errors.AsType[*cnpserr.CNPSError](err); ok {
 				log.Printf("CNPS Error Occurred: %v", cnpErr)
 
 				newCnpsErr := response.CreateCnpsErrorResponse(*cnpErr)
@@ -75,7 +74,7 @@ func HandleConnection(conn net.Conn) {
 				continue
 			}
 
-			// generic errors
+			// generic errs
 			log.Printf("Internal Error: %v", err)
 			internalErr := response.CreateErrorResponse(err)
 

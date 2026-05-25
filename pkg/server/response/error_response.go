@@ -16,11 +16,13 @@ func CreateCnpsErrorResponse(err errors.CNPSError) types.Response {
 	return res
 }
 
-func CreateErrorResponse(_ error) types.Response {
+func CreateErrorResponse(err error) types.Response {
 	res := types.Response{
-		Type:    types.ResTypeEr,
-		Status:  status.StatusInternalError,
-		Payload: nil,
+		Type:   types.ResTypeEr,
+		Status: status.StatusInternalError,
+		Payload: map[string]interface{}{
+			"error": err.Error(),
+		},
 	}
 	return res
 }

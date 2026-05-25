@@ -1,13 +1,9 @@
 package types
 
-type Cebu struct {
-	Kid     string `json:"kid"`
-	AuthPvd string `json:"auth_pvd"`
-	Token   string `json:"token"`
-}
+import "github.com/Sephy314/cnps/pkg/philippines/cebu"
 
 type Info struct {
-	Cebu *Cebu                   `json:"cebu,omitempty"`
+	Cebu *cebu.Cebu              `json:"cebu,omitempty"`
 	Ext  *map[string]interface{} `json:"ext,omitempty"`
 }
 

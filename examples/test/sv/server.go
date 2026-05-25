@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/Sephy314/cnps/pkg/logger"
 	"github.com/Sephy314/cnps/pkg/server/handler"
@@ -22,14 +21,17 @@ func main() {
 	err := cnps.Start(":31415")
 
 	if err != nil {
-		log.Fatal(err)
+		logger.Log{
+			Msg:   err,
+			Level: logger.ERROR,
+		}.Print()
 	}
 
 }
 
 func testHandler(req types.Request) (types.Response, error) {
 	logger.Log{
-		Msg:   fmt.Sprintf("Request: %+v", req),
+		Msg:   fmt.Sprintf("Handler got : %+v", req),
 		Level: logger.INFO,
 	}.Print()
 

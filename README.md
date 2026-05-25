@@ -145,7 +145,7 @@ CNPS includes a custom auth system:
 
 * Issues tokens
 * Manages key lifecycle
-* Handles multi service identity
+* Handles multiservice identity
 
 ### Cebu (Token)
 
