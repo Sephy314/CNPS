@@ -8,8 +8,8 @@ import (
 	"log"
 	"net"
 
+	"github.com/Sephy314/cnps/pkg/logger"
 	"github.com/Sephy314/cnps/pkg/server/error"
-	"github.com/Sephy314/cnps/pkg/server/logger"
 	response2 "github.com/Sephy314/cnps/pkg/server/response"
 	"github.com/Sephy314/cnps/pkg/server/status"
 	"github.com/google/uuid"

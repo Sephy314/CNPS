@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/Sephy314/cnps/pkg/client/client"
 	"github.com/Sephy314/cnps/pkg/dto"
-	"github.com/Sephy314/cnps/pkg/server/logger"
+	"github.com/Sephy314/cnps/pkg/logger"
 )
 
 func main() {

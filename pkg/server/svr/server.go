@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/Sephy314/cnps/pkg/logger"
 	"github.com/Sephy314/cnps/pkg/server/handler"
-	"github.com/Sephy314/cnps/pkg/server/logger"
 )
 
 func Start(addr string) error {

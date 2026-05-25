@@ -5,6 +5,7 @@ import (
 
 	"github.com/Sephy314/cnps/pkg/dto"
 	cnperr "github.com/Sephy314/cnps/pkg/server/error"
+	"github.com/Sephy314/cnps/pkg/server/middleware"
 	"github.com/Sephy314/cnps/pkg/server/router"
 	"github.com/Sephy314/cnps/pkg/utils"
 )
@@ -27,6 +28,8 @@ func HandleRequest(msg string) (*dto.Response, error) {
 		log.Printf("Error parsing request: %v", err)
 		return nil, err
 	}
+
+	handler = middleware.Chain(handler, middleware.Middlewares...)
 
 	res, err := handler(*parsedReq)
 
