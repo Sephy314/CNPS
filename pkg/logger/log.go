@@ -24,8 +24,3 @@ type ResponseLog struct {
 	ReqID  string
 	Status status.Status
 }
-
-type logging struct {
-	Msg   string
-	Level LoggingLevel
-}
