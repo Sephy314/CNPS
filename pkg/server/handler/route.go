@@ -1,7 +1,7 @@
-package router
+package handler
 
 import (
-	"github.com/Sephy314/cnps/pkg/dto"
+	"github.com/Sephy314/cnps/pkg/types"
 )
 
 var ROUTES = NewRouters()
@@ -21,4 +21,4 @@ type Routers struct {
 }
 
 type Middleware func(next Handler) Handler
-type Handler func(req dto.Request) (dto.Response, error)
+type Handler func(req types.Request) (types.Response, error)

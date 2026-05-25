@@ -3,10 +3,10 @@ package client
 import (
 	"encoding/json"
 
-	"github.com/Sephy314/cnps/pkg/dto"
+	"github.com/Sephy314/cnps/pkg/types"
 )
 
-func (c *Client) Send(r dto.Request) error {
+func (c *Client) Send(r types.Request) error {
 	marshaled, err := json.Marshal(r)
 	if err != nil {
 		return err

@@ -1,4 +1,4 @@
-package dto
+package types
 
 type Cebu struct {
 	Kid     string `json:"kid"`
@@ -16,12 +16,12 @@ type Payload map[string]interface{}
 type ResType string
 
 const (
-	ResTypeRES ResType = "RES"
-	ResTypeEr  ResType = "ERR"
+	// ResTypeEr ResTypeRES ResType = "RES"
+	ResTypeEr ResType = "ERR"
 )
 
 type ReqType string
 
 const (
-	ReqTypeREQ ReqType = "REQ"
+// ReqTypeREQ ReqType = "REQ"
 )

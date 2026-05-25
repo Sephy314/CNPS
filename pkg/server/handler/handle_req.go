@@ -3,15 +3,13 @@ package handler
 import (
 	"log"
 
-	"github.com/Sephy314/cnps/pkg/dto"
-	cnperr "github.com/Sephy314/cnps/pkg/server/error"
-	"github.com/Sephy314/cnps/pkg/server/middleware"
-	"github.com/Sephy314/cnps/pkg/server/router"
+	"github.com/Sephy314/cnps/pkg/server/errors"
+	"github.com/Sephy314/cnps/pkg/types"
 	"github.com/Sephy314/cnps/pkg/utils"
 )
 
-func HandleRequest(msg string) (*dto.Response, error) {
-	handler, err := router.Route(msg)
+func HandleRequest(msg string) (*types.Response, error) {
+	handler, err := Route(msg)
 
 	if err != nil {
 		return nil, err
@@ -19,7 +17,7 @@ func HandleRequest(msg string) (*dto.Response, error) {
 
 	if handler == nil {
 		log.Printf("Command Not Found: %v", msg)
-		return nil, cnperr.NotFoundError("Command Not Found.")
+		return nil, errors.NotFoundError("Command Not Found.")
 	}
 
 	parsedReq, err := utils.ParseRequest(msg)
@@ -29,7 +27,7 @@ func HandleRequest(msg string) (*dto.Response, error) {
 		return nil, err
 	}
 
-	handler = middleware.Chain(handler, middleware.Middlewares...)
+	handler = Chain(handler, Middlewares...)
 
 	res, err := handler(*parsedReq)
 

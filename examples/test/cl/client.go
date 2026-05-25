@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/Sephy314/cnps/pkg/client/client"
-	"github.com/Sephy314/cnps/pkg/dto"
 	"github.com/Sephy314/cnps/pkg/logger"
+	"github.com/Sephy314/cnps/pkg/types"
 )
 
 func main() {
@@ -15,12 +15,12 @@ func main() {
 
 	defer conn.Close()
 
-	res, err := conn.Request(dto.Request{
+	res, err := conn.Request(types.Request{
 		Target:  ":31415",
 		Type:    "REQ",
 		Cmd:     ".test",
 		Act:     "action",
-		Info:    dto.Info{},
+		Info:    types.Info{},
 		Payload: nil,
 	})
 

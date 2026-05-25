@@ -1,8 +1,8 @@
 package client
 
-import "github.com/Sephy314/cnps/pkg/dto"
+import "github.com/Sephy314/cnps/pkg/types"
 
-func (c *Client) Request(r dto.Request) (*dto.Response, error) {
+func (c *Client) Request(r types.Request) (*types.Response, error) {
 	err := c.Send(r)
 	if err != nil {
 		return nil, err

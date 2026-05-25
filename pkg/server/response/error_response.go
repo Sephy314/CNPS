@@ -1,14 +1,14 @@
 package response
 
 import (
-	dto2 "github.com/Sephy314/cnps/pkg/dto"
-	cnperr "github.com/Sephy314/cnps/pkg/server/error"
+	"github.com/Sephy314/cnps/pkg/server/errors"
 	"github.com/Sephy314/cnps/pkg/server/status"
+	"github.com/Sephy314/cnps/pkg/types"
 )
 
-func CreateCnpsErrorResponse(err cnperr.CNPSError) dto2.Response {
-	res := dto2.Response{
-		Type:    dto2.ResTypeEr,
+func CreateCnpsErrorResponse(err errors.CNPSError) types.Response {
+	res := types.Response{
+		Type:    types.ResTypeEr,
 		Status:  err.Code,
 		Payload: nil,
 	}
@@ -16,9 +16,9 @@ func CreateCnpsErrorResponse(err cnperr.CNPSError) dto2.Response {
 	return res
 }
 
-func CreateErrorResponse(err error) dto2.Response {
-	res := dto2.Response{
-		Type:    dto2.ResTypeEr,
+func CreateErrorResponse(_ error) types.Response {
+	res := types.Response{
+		Type:    types.ResTypeEr,
 		Status:  status.StatusInternalError,
 		Payload: nil,
 	}

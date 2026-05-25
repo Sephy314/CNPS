@@ -1,4 +1,4 @@
-package dto
+package types
 
 type Request struct {
 	Target  string  `json:"target"`
