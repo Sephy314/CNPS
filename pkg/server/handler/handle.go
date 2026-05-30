@@ -2,6 +2,7 @@ package handler
 
 import (
 	"bufio"
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -47,8 +48,9 @@ func HandleConnection(conn net.Conn) {
 
 		// Requested
 		reqId := uuid.New().String()
+		ctx := context.Background()
 
-		res, err := HandleRequest(msg)
+		res, err := HandleRequest(ctx, msg)
 
 		if err != nil {
 

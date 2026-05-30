@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"context"
+
 	"github.com/Sephy314/cnps/pkg/types"
 )
 
@@ -21,4 +23,4 @@ type Routers struct {
 }
 
 type Middleware func(next Handler) Handler
-type Handler func(req types.Request) (types.Response, error)
+type Handler func(ctx context.Context, req types.Request) (types.Response, error)

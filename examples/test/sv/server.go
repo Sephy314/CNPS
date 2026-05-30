@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/Sephy314/cnps/pkg/logger"
@@ -29,7 +30,7 @@ func main() {
 
 }
 
-func testHandler(req types.Request) (types.Response, error) {
+func testHandler(_ context.Context, req types.Request) (types.Response, error) {
 	logger.Log{
 		Msg:   fmt.Sprintf("Handler got : %+v", req),
 		Level: logger.INFO,
@@ -42,13 +43,13 @@ func testHandler(req types.Request) (types.Response, error) {
 }
 
 func testMiddleware(n handler.Handler) handler.Handler {
-	return func(req types.Request) (types.Response, error) {
+	return func(c context.Context, req types.Request) (types.Response, error) {
 		logger.Log{
 			Msg:   "Middleware Worked",
 			Level: logger.DEBUG,
 		}.Print()
 
-		r, err := n(req)
+		r, err := n(c, req)
 		if err != nil {
 			return types.Response{}, err
 		}
@@ -58,13 +59,13 @@ func testMiddleware(n handler.Handler) handler.Handler {
 }
 
 func testAnotherMiddleware(n handler.Handler) handler.Handler {
-	return func(req types.Request) (types.Response, error) {
+	return func(c context.Context, req types.Request) (types.Response, error) {
 		logger.Log{
 			Msg:   "Another Middleware Worked",
 			Level: logger.DEBUG,
 		}.Print()
 
-		r, err := n(req)
+		r, err := n(c, req)
 		if err != nil {
 			return types.Response{}, err
 		}

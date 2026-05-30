@@ -1,12 +1,14 @@
 package handler
 
 import (
+	"context"
+
 	"github.com/Sephy314/cnps/pkg/server/errors"
 	"github.com/Sephy314/cnps/pkg/types"
 	"github.com/Sephy314/cnps/pkg/utils"
 )
 
-func Route(req string) (func(types.Request) (types.Response, error), error) {
+func Route(req string) (func(context.Context, types.Request) (types.Response, error), error) {
 	parsedReq, err := utils.ParseRequest(req)
 
 	if err != nil {

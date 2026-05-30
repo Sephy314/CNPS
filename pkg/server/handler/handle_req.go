@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"log"
 
 	"github.com/Sephy314/cnps/pkg/server/errors"
@@ -8,7 +9,7 @@ import (
 	"github.com/Sephy314/cnps/pkg/utils"
 )
 
-func HandleRequest(msg string) (*types.Response, error) {
+func HandleRequest(c context.Context, msg string) (*types.Response, error) {
 	handler, err := Route(msg)
 
 	if err != nil {
@@ -29,7 +30,7 @@ func HandleRequest(msg string) (*types.Response, error) {
 
 	handler = Chain(handler, Middlewares...)
 
-	res, err := handler(*parsedReq)
+	res, err := handler(c, *parsedReq)
 
 	if err != nil {
 		log.Printf("Error handling request: %v", err)
