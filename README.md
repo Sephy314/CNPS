@@ -1,227 +1,296 @@
 # CNPS
 
-**CNPS (Custom Network Protocol System)** is a lightweight, TCP-based, CLI-first network protocol designed for real-time, command-driven communication between clients, servers, and AI agents.
+**CNPS (Command Network Protocol Stream)** is a command-oriented application protocol built on persistent TCP connections and NDJSON framing.
 
-It focuses on:
-
-* Minimal overhead
-* Stream-based communication (NDJSON over TCP)
-* Middleware-driven architecture
-* Built-in authentication system (Cebu / Philippines model)
-* Extensibility via command namespaces
+It is designed for CLI applications, AI agents, real-time systems, and lightweight services that require a simple stream-native communication model.
 
 ---
 
-## 🚀 Core Idea
+## Features
 
-CNPS replaces traditional request/response-heavy APIs (like REST/GraphQL) with a **persistent command stream model**.
+* Persistent TCP connections
+* NDJSON framing
+* Command-oriented architecture
+* Request/Response model
+* Bidirectional streaming
+* Middleware support
+* Context propagation
+* CLI-first design
+* AI Agent-friendly semantics
+* Human-readable protocol
+
+---
+
+## Why CNPS?
+
+CNPS focuses on **commands instead of resources**.
 
 Instead of:
 
+```http id="h1q9xk"
+POST /user
 ```
-HTTP request → response → close connection
+
+or:
+
+```proto id="k2j0aa"
+rpc CreateUser()
 ```
 
 CNPS uses:
 
+```json id="c9p2lm"
+{
+  "cmd": ".user",
+  "act": "@MAK"
+}
 ```
-Persistent TCP stream → NDJSON messages → continuous interaction
-```
+
+This makes intent explicit and consistent across systems.
 
 ---
 
-## 🧱 Architecture Overview
+## Architecture
 
-### Layers
+```text id="a8d1qs"
+Application
+     │
+ Middleware
+     │
+   Router
+     │
+    CNPS
+     │
+ Persistent TCP
+```
 
-* **Transport Layer**
+CNPS operates over long-lived TCP connections using NDJSON messages.
 
-    * TCP persistent connection
-    * NDJSON framing (1 JSON object per line)
-
-* **Protocol Layer**
-
-    * Command routing (`cmd`)
-    * Action semantics (`act`)
-    * Target routing (`to`)
-    * Metadata (`info`)
-    * Payload (`payload`)
-
-* **Application Layer**
-
-    * Handlers
-    * Middleware pipeline
-    * Custom services (auth, logging, routing, etc.)
+Each line is a complete message.
 
 ---
 
-## 📦 Message Format
+## Message Format
 
 ### Request
 
-```json
+```json id="m4x9za"
 {
-  "type" : "REQ",
-  "to": "service.name",
-  "cmd": ".search.web",
-  "act": "@APP.submit",
-  "info": {
-    "cebu" : {
-      "philippines" : "auth.provider",
-      "kid" : "uuid v7 key id",
-      "token" : "Cebu CEBUTOKEN"
-    },
-    "request_id": "uuid"
-  },
+  "to": "chat.app",
+  "cmd": ".message",
+  "act": "@MAK",
+  "info": {},
   "payload": {
-    "query": "hello"
+    "content": "Hello"
   }
 }
 ```
 
 ### Response
 
-```json
+```json id="p7v3ld"
 {
-  "type": "RES",
   "status": 10,
-  "info": {
-    "request_id": "request uuid v7"
-  },
+  "info": {},
   "payload": {
-    "result": "ok"
+    "message": "OK"
   }
 }
 ```
 
 ---
 
-## ⚙️ Command System
+## Fields
 
-CNPS uses a **dot-based capability tree**:
+| Field   | Description          |
+| ------- | -------------------- |
+| to      | Target application   |
+| cmd     | Command / capability |
+| act     | Action type          |
+| info    | Metadata             |
+| payload | Data body            |
 
-```
-.search.web
-.search.image
-.auth.login
-.system.ping
-```
+---
 
-Each command maps to a handler:
+## Actions (CRUD Model)
 
-```go
-handler.AddRoutes(".test", testHandler)
+| Action | Meaning      |
+| ------ | ------------ |
+| @QRY   | Query / Read |
+| @MAK   | Create       |
+| @UDT   | Update       |
+| @RMV   | Delete       |
+
+---
+
+## Command Tree
+
+```text id="t1x8ab"
+.user
+.user.profile
+.user.settings
+
+.post
+.post.comment
+
+.chat
+.chat.room
+.chat.message
 ```
 
 ---
 
-## 🧩 Middleware System
+## Status Codes
 
-CNPS supports chainable middleware:
+### 1. Success (SUC)
 
-```go
-type Handler func(req dto.Request) (dto.Response, error)
-type Middleware func(next Handler) Handler
+| Code | Meaning |
+| ---- | ------- |
+| 10   | OK      |
+
+---
+
+### 2. Processing
+
+| Code | Meaning    |
+| ---- | ---------- |
+| 20   | Accepted   |
+| 21   | Processing |
+
+---
+
+### 3. Client Error
+
+| Code | Meaning           |
+| ---- | ----------------- |
+| 30   | Client Error      |
+| 31   | Bad Request       |
+| 32   | Not Authorised    |
+| 33   | Expired Token     |
+| 34   | Forbidden         |
+| 35   | Duplicated        |
+| 36   | Conflict          |
+| 37   | Too Many Requests |
+| 38   | Not Found         |
+
+---
+
+### 4. Server Error
+
+| Code | Meaning               |
+| ---- | --------------------- |
+| 40   | Internal Server Error |
+
+---
+
+## Streaming
+
+CNPS supports continuous bidirectional streaming over a single TCP connection.
+
+```text id="s9k2qp"
+Client → Request
+Server → Response
+
+Server → Event
+Server → Event
+Server → Event
 ```
 
-Example:
+---
 
-```go
-func Logger(next Handler) Handler {
-    return func(req dto.Request) (dto.Response, error) {
-        log.Println("Middleware triggered")
-        return next(req)
-    }
+## Middleware
+
+Middleware provides extensibility for cross-cutting concerns.
+
+Examples:
+
+* Logging
+* Authentication
+* Recovery
+* Metrics
+* Rate Limiting
+* Tracing
+
+```go id="l2m8qz"
+server.Use(Logger())
+server.Use(Recovery())
+server.Use(Auth())
+```
+
+---
+
+## Routing
+
+```go id="r7n1vd"
+router.Handle(".user", HandleUser)
+router.Handle(".post", HandlePost)
+router.Handle(".chat", HandleChat)
+```
+
+---
+
+## Use Cases
+
+### CLI
+
+```bash id="c1v9kk"
+cnps call app .user @QRY
+```
+
+### AI Agents
+
+```json id="q3p8xx"
+{
+  "cmd": ".calendar",
+  "act": "@MAK",
+  "payload": {
+    "title": "Meeting"
+  }
 }
 ```
 
----
+### Real-Time Systems
 
-## 🔐 Authentication Model (Cebu / Philippines)
+* Chat systems
+* Multiplayer games
+* Event streaming
+* Notifications
 
-CNPS includes a custom auth system:
+### Internal Systems
 
-### Philippines (Auth Provider)
-
-* Issues tokens
-* Manages key lifecycle
-* Handles multiservice identity
-
-### Cebu (Token)
-
-* Signed identity token
-* Used across all CNPS services
-* Enables SSO-like behaviour across systems
-
-Key feature:
-
-> One token → multiple services → unified identity layer
+* Microservices
+* Workers
+* Control planes
+* Internal APIs
 
 ---
 
-## 🌐 Design Goals
+## Design Goals
 
-* Low latency (persistent TCP connection)
-* CLI-first / AI-agent friendly
-* No HTTP overhead
-* Extensible command routing
-* Middleware-based logic injection
-* Distributed-friendly design (future-ready)
-
----
-
-## 🔄 Data Flow
-
-```
-Client
-  ↓
-TCP Stream
-  ↓
-Middleware Chain
-  ↓
-Command Router
-  ↓
-Handler
-  ↓
-Response Stream
-```
+* Simplicity over complexity
+* Stream-first communication
+* Human-readable protocol
+* Middleware extensibility
+* AI-friendly structure
+* High-performance TCP communication
 
 ---
 
-## 🛠 Example Server Setup
+## Non-Goals
 
-```go
-server := cnps.NewServer(":31415")
+CNPS is not:
 
-server.Use(LoggerMiddleware)
-server.AddRoutes(".test", testHandler)
+* A replacement for HTTP
+* A message broker
+* A service mesh
+* A binary protocol
 
-server.Start()
-```
-
----
-
-## 📡 Why CNPS Exists
-
-CNPS is designed for systems where:
-
-* HTTP feels too heavy
-* WebSocket feels too UI-oriented
-* gRPC feels too rigid or schema-heavy
-
-Instead, CNPS aims for:
-
-> “terminal-native distributed systems”
+CNPS is an application-layer protocol over TCP.
 
 ---
 
-## 🧪 Future Ideas
+## License
 
-* `.cnp` executable workflow files (agent automation)
-* Built-in event streaming model
-* Distributed router nodes
-* Pluggable auth providers (Cebu-compatible)
-* AI-agent execution layer
-* Pub/Sub command channels
+Licensed under the Apache License, Version 2.0.
 
-
+See LICENSE file for details.
