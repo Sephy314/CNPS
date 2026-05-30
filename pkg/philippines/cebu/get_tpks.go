@@ -6,23 +6,29 @@ import (
 	"github.com/Sephy314/cnps/pkg/philippines/errs"
 )
 
-func (tpks *Tpks) GetCurrentPrivateKey() (*ecdsa.PrivateKey, error) {
-	tpks.mu.Lock()
-	defer tpks.mu.Unlock()
+func (t *Tpks) GetCurrentPrivateKey() (*ecdsa.PrivateKey, error) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
 
-	priv := tpks.KeyPair.PrivateKey
+	priv := t.KeyPair.PrivateKey
 
 	return priv, nil
 }
 
-func (tpks *Tpks) GetPublicKeyByKid(kid string) (*ecdsa.PublicKey, error) {
-	tpks.mu.Lock()
-	defer tpks.mu.Unlock()
+func (t *Tpks) GetPublicKeyByKid(kid string) (*ecdsa.PublicKey, error) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
 
-	pub := tpks.Tpks[kid].Pub
-	if pub == nil {
+	pub, ok := t.Tpks[kid]
+	if !ok {
 		return nil, errs.NotFoundError
 	}
 
-	return pub, nil
+	unmarshalled, err := UnmarshalPublicKey(pub.Pub)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return unmarshalled, nil
 }

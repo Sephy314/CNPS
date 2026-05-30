@@ -14,8 +14,7 @@ func ParseRequest(rawreq string) (*types.Request, error) {
 		return nil, err
 	}
 
-	if req.Type == "" ||
-		req.Cmd == "" ||
+	if req.Cmd == "" ||
 		req.Act == "" ||
 		req.Target == "" {
 		return nil, errors.BadRequestError("Request Type is required")

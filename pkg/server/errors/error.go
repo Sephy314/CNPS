@@ -1,7 +1,7 @@
 package errors
 
 import (
-	"github.com/Sephy314/cnps/pkg/server/status"
+	"github.com/Sephy314/cnps/pkg/types/status"
 )
 
 type CNPSError struct {

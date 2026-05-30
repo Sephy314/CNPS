@@ -11,7 +11,7 @@ import (
 	"github.com/Sephy314/cnps/pkg/logger"
 	cnpserr "github.com/Sephy314/cnps/pkg/server/errors"
 	"github.com/Sephy314/cnps/pkg/server/response"
-	"github.com/Sephy314/cnps/pkg/server/status"
+	"github.com/Sephy314/cnps/pkg/types/status"
 	"github.com/google/uuid"
 )
 

@@ -2,11 +2,19 @@ package types
 
 type Request struct {
 	Target  string  `json:"target"`
-	Type    ReqType `json:"type"`
 	Cmd     string  `json:"cmd"`
-	Act     string  `json:"act"`
+	Act     Act     `json:"act"`
 	Info    Info    `json:"info"`
 	Payload Payload `json:"payload"`
 }
+
+type Act string
+
+const (
+	QUERY  Act = "@Qry"
+	MAKE   Act = "@Mak"
+	UPDATE Act = "@Udt"
+	REMOVE Act = "@Rmv"
+)
 
 // {"target":"cnp:/cnp.app", "type":"REQ", "cmd":".test", "act":"action"}

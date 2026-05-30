@@ -5,9 +5,9 @@ import (
 
 	"github.com/Sephy314/cnps/pkg/logger"
 	"github.com/Sephy314/cnps/pkg/server/handler"
-	"github.com/Sephy314/cnps/pkg/server/status"
 	cnps "github.com/Sephy314/cnps/pkg/server/svr"
 	"github.com/Sephy314/cnps/pkg/types"
+	"github.com/Sephy314/cnps/pkg/types/status"
 )
 
 func main() {
@@ -36,7 +36,6 @@ func testHandler(req types.Request) (types.Response, error) {
 	}.Print()
 
 	return types.Response{
-		Type:    "RES",
 		Status:  status.StatusOK,
 		Payload: nil,
 	}, nil

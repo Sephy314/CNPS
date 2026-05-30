@@ -7,7 +7,7 @@ import (
 )
 
 func TestTpksFlow(t *testing.T) {
-	tpks, err := Init()
+	tpks, err := TpksInit()
 	if err != nil {
 		t.Fatalf("Error initializing TPKS: %v", err)
 	}

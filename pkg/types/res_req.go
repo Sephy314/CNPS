@@ -8,16 +8,3 @@ type Info struct {
 }
 
 type Payload map[string]interface{}
-
-type ResType string
-
-const (
-	// ResTypeEr ResTypeRES ResType = "RES"
-	ResTypeEr ResType = "ERR"
-)
-
-type ReqType string
-
-const (
-// ReqTypeREQ ReqType = "REQ"
-)

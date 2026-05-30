@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/Sephy314/cnps/pkg/philippines/errs"
-	"github.com/Sephy314/cnps/pkg/philippines/server"
 )
 
 type Cebu struct {
@@ -122,6 +121,7 @@ func (c *Cebu) Verify(pub *ecdsa.PublicKey) error {
 	return nil
 }
 func CreateCebu(
+	server Philippines,
 	c Claims,
 	tpks *Tpks,
 ) (*Cebu, error) {
@@ -137,7 +137,7 @@ func CreateCebu(
 
 	cebu := &Cebu{
 		Kid:         tpks.CurrentKid,
-		Philippines: server.PhilippinesName,
+		Philippines: server.Name,
 
 		Token: token,
 
@@ -147,7 +147,7 @@ func CreateCebu(
 	}
 
 	// sign
-	err = cebu.Sign(tpks.KeyPair.PrivateKey)
+	err = cebu.Sign(server.Tpks.KeyPair.PrivateKey)
 	if err != nil {
 		return nil, err
 	}
