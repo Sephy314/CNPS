@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Sephy314/cnps/pkg/client/client"
+	"github.com/Sephy314/cnps/pkg/client"
 	"github.com/Sephy314/cnps/pkg/logger"
 	"github.com/Sephy314/cnps/pkg/types"
 )
