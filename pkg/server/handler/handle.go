@@ -29,10 +29,10 @@ func HandleConnection(conn net.Conn) {
 		msg, err := reader.ReadString('\n')
 		if err != nil {
 			if err == io.EOF {
-				//logger.Log{
-				//	Msg:   "Connection closed by remote hose",
-				//	Level: logger.INFO,
-				//}.Print()
+				logger.Log{
+					Msg:   "Connection closed",
+					Level: logger.INFO,
+				}.Print()
 			} else {
 				logger.Log{
 					Msg:   fmt.Sprintf("Error reading from connection: %v", err),
@@ -50,10 +50,15 @@ func HandleConnection(conn net.Conn) {
 		reqId := uuid.New().String()
 		ctx := context.Background()
 
+		ctx = context.WithValue(
+			ctx,
+			"REQUEST_ID",
+			reqId,
+		)
+
 		res, err := HandleRequest(ctx, msg)
 
 		if err != nil {
-
 			// CNPS errs check
 			if cnpErr, ok := errors.AsType[*cnpserr.CNPSError](err); ok {
 				log.Printf("CNPS Error Occurred: %v", cnpErr)
@@ -65,7 +70,7 @@ func HandleConnection(conn net.Conn) {
 						Msg:   cnpErr.Message,
 						Level: logger.ERROR,
 					},
-					ReqID:  reqId,
+					ReqID:  ctx.Value("REQUEST_ID").(string),
 					Status: cnpErr.Code,
 				}
 
@@ -85,7 +90,7 @@ func HandleConnection(conn net.Conn) {
 					Msg:   err.Error(),
 					Level: logger.ERROR,
 				},
-				ReqID:  reqId,
+				ReqID:  ctx.Value("REQUEST_ID").(string),
 				Status: status.StatusInternalError,
 			}
 
@@ -102,7 +107,7 @@ func HandleConnection(conn net.Conn) {
 					Msg:   "Requested",
 					Level: logger.INFO,
 				},
-				ReqID:  reqId,
+				ReqID:  ctx.Value("REQUEST_ID").(string),
 				Status: res.Status,
 			}
 

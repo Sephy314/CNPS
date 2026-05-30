@@ -15,8 +15,9 @@ const (
 )
 
 type Log struct {
-	Msg   any
-	Level LoggingLevel
+	Msg    any
+	Level  LoggingLevel
+	Fields any `json:"fields,omitempty"`
 }
 
 type ResponseLog struct {

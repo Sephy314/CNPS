@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	conn, err := client.Connect(":1008")
+	conn, err := client.Connect(":31415")
 
 	if err != nil {
 		panic(err)
@@ -17,8 +17,8 @@ func main() {
 
 	// Request Philippines
 	res, err := conn.Request(types.Request{
-		Target:  ":1008",
-		Cmd:     ".tpks",
+		Target:  ":31415",
+		Cmd:     ".panic",
 		Act:     types.QUERY,
 		Info:    types.Info{},
 		Payload: nil,

@@ -5,12 +5,14 @@ import (
 	"log"
 
 	"github.com/Sephy314/cnps/pkg/server/errors"
+	"github.com/Sephy314/cnps/pkg/server/middleware"
+	"github.com/Sephy314/cnps/pkg/server/route"
 	"github.com/Sephy314/cnps/pkg/types"
 	"github.com/Sephy314/cnps/pkg/utils"
 )
 
 func HandleRequest(c context.Context, msg string) (*types.Response, error) {
-	handler, err := Route(msg)
+	handler, err := route.Route(msg)
 
 	if err != nil {
 		return nil, err
@@ -28,7 +30,7 @@ func HandleRequest(c context.Context, msg string) (*types.Response, error) {
 		return nil, err
 	}
 
-	handler = Chain(handler, Middlewares...)
+	handler = middleware.Chain(handler, middleware.Middlewares...)
 
 	res, err := handler(c, *parsedReq)
 

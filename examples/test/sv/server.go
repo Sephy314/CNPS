@@ -5,18 +5,22 @@ import (
 	"fmt"
 
 	"github.com/Sephy314/cnps/pkg/logger"
-	"github.com/Sephy314/cnps/pkg/server/handler"
+	"github.com/Sephy314/cnps/pkg/server/dto"
+	"github.com/Sephy314/cnps/pkg/server/middleware"
+	"github.com/Sephy314/cnps/pkg/server/route"
 	cnps "github.com/Sephy314/cnps/pkg/server/svr"
 	"github.com/Sephy314/cnps/pkg/types"
 	"github.com/Sephy314/cnps/pkg/types/status"
 )
 
 func main() {
-	handler.AddRoutes(".test", testHandler)
+	route.AddRoutes(".test", testHandler)
+	route.AddRoutes(".panic", testPanic)
 
-	handler.AddMiddlewares(
+	middleware.AddMiddlewares(
 		testMiddleware,
 		testAnotherMiddleware,
+		middleware.Recovery,
 	)
 
 	err := cnps.Start(":31415")
@@ -42,7 +46,11 @@ func testHandler(_ context.Context, req types.Request) (types.Response, error) {
 	}, nil
 }
 
-func testMiddleware(n handler.Handler) handler.Handler {
+func testPanic(_ context.Context, _ types.Request) (types.Response, error) {
+	panic("WOAHHHH")
+}
+
+func testMiddleware(n dto.Handler) dto.Handler {
 	return func(c context.Context, req types.Request) (types.Response, error) {
 		logger.Log{
 			Msg:   "Middleware Worked",
@@ -58,7 +66,7 @@ func testMiddleware(n handler.Handler) handler.Handler {
 	}
 }
 
-func testAnotherMiddleware(n handler.Handler) handler.Handler {
+func testAnotherMiddleware(n dto.Handler) dto.Handler {
 	return func(c context.Context, req types.Request) (types.Response, error) {
 		logger.Log{
 			Msg:   "Another Middleware Worked",
