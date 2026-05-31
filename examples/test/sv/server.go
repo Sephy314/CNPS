@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/Sephy314/cnps/pkg/logger"
 	"github.com/Sephy314/cnps/pkg/server/dto"
@@ -14,6 +15,9 @@ import (
 )
 
 func main() {
+	wd, _ := os.Getwd()
+	fmt.Println(wd)
+
 	route.AddRoutes(".test", testHandler)
 	route.AddRoutes(".panic", testPanic)
 
@@ -23,7 +27,24 @@ func main() {
 		middleware.Recovery,
 	)
 
-	err := cnps.Start(":31415")
+	sv, err := cnps.NewServer(":31415")
+	if err != nil {
+		logger.Log{
+			Msg:    err,
+			Level:  logger.ERROR,
+			Fields: err,
+		}.Print()
+	}
+
+	module, err := cnps.NewTLSModule("./cert.pem", "./private.pem")
+	if err != nil {
+		panic(err)
+		return
+	}
+
+	sv.UseTLS(module)
+
+	err = sv.Start()
 
 	if err != nil {
 		logger.Log{

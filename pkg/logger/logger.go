@@ -16,6 +16,10 @@ func (l Log) Print() {
 		"msg":   l.Msg,
 	}
 
+	if l.Fields != nil {
+		logged["fields"] = l.Fields
+	}
+
 	var buf bytes.Buffer
 
 	encoder := json.NewEncoder(&buf)

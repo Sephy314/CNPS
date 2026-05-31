@@ -33,6 +33,7 @@ func HandleConnection(conn net.Conn) {
 					Msg:   "Connection closed",
 					Level: logger.INFO,
 				}.Print()
+				return
 			} else {
 				logger.Log{
 					Msg:   fmt.Sprintf("Error reading from connection: %v", err),

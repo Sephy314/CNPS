@@ -5,7 +5,7 @@ import (
 	"net"
 )
 
-func Connect(addr string) (*Client, error) {
+func NewClient(addr string) (*Client, error) {
 	conn, err := net.Dial("tcp", addr)
 
 	if err != nil {
