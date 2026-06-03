@@ -1,4 +1,4 @@
-package svr
+package cnps
 
 import (
 	"crypto/tls"
@@ -56,6 +56,11 @@ func (s *Server) Start() error {
 			return
 		}
 	}(ln)
+
+	logger.Log{
+		Msg:   "Listening on " + s.addr,
+		Level: logger.INFO,
+	}.Print()
 
 	for {
 		conn, err := ln.Accept()

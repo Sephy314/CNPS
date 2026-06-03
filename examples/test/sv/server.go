@@ -3,20 +3,23 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/Sephy314/cnps/pkg/logger"
+	cnps "github.com/Sephy314/cnps/pkg/server/cnps"
 	"github.com/Sephy314/cnps/pkg/server/dto"
 	"github.com/Sephy314/cnps/pkg/server/middleware"
 	"github.com/Sephy314/cnps/pkg/server/route"
-	cnps "github.com/Sephy314/cnps/pkg/server/svr"
 	"github.com/Sephy314/cnps/pkg/types"
 	"github.com/Sephy314/cnps/pkg/types/status"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func main() {
-	wd, _ := os.Getwd()
-	fmt.Println(wd)
+	sec := "a-string-secret-at-least-256-bits-long"
+	p := []string{
+		".allow",
+	}
+	alg := jwt.SigningMethodHS256
 
 	route.AddRoutes(".test", testHandler)
 	route.AddRoutes(".panic", testPanic)
@@ -25,6 +28,7 @@ func main() {
 		testMiddleware,
 		testAnotherMiddleware,
 		middleware.Recovery,
+		middleware.AuthMiddleware([]byte(sec), p, alg),
 	)
 
 	sv, err := cnps.NewServer(":31415")

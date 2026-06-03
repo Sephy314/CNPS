@@ -19,11 +19,17 @@ func main() {
 
 	defer conn.Close()
 
+	dt := map[string]any{
+		"authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+	}
+
 	res, err := conn.Request(types.Request{
-		Target:  ":31415",
-		Cmd:     ".test",
-		Act:     types.QUERY,
-		Info:    types.Info{},
+		Target: ":31415",
+		Cmd:    ".test",
+		Act:    types.QUERY,
+		Info: types.Info{
+			Ext: &dt,
+		},
 		Payload: nil,
 	})
 
