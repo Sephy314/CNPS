@@ -57,8 +57,11 @@ func HandleConnection(conn net.Conn) {
 			reqId,
 		)
 
-		res, err := HandleRequest(ctx, msg)
+		ip := conn.RemoteAddr().(*net.TCPAddr)
 
+		ctx = context.WithValue(ctx, "IP", ip.IP.String())
+
+		res, err := HandleRequest(ctx, msg)
 		if err != nil {
 			// CNPS errs check
 			if cnpErr, ok := errors.AsType[*cnpserr.CNPSError](err); ok {

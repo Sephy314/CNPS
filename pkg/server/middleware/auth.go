@@ -33,7 +33,7 @@ func AuthMiddleware(sec []byte, p []string, a jwt.SigningMethod) func(dto.Handle
 
 			tk = strings.TrimPrefix(tk, "Bearer ")
 
-			ps, e := jwt.Parse(tk, func(token *jwt.Token) (interface{}, error) {
+			ps, e := jwt.Parse(tk, func(token *jwt.Token) (any, error) {
 				if token.Method != a {
 					return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 				}
@@ -59,7 +59,6 @@ func AuthMiddleware(sec []byte, p []string, a jwt.SigningMethod) func(dto.Handle
 			}
 
 			sbj, err := claims.GetSubject()
-
 			if err != nil {
 				return types.Response{
 					Status:  status.StatusUnauthorized,
