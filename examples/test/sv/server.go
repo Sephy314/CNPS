@@ -30,7 +30,7 @@ func main() {
 		testAnotherMiddleware,
 		middleware.Recovery,
 		middleware.AuthMiddleware([]byte(sec), p, alg),
-		middleware.RateLimit,
+		middleware.RateLimit(100),
 	)
 
 	sv, err := cnps.NewServer(":31415")
